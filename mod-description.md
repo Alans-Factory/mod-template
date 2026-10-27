@@ -32,6 +32,6 @@ The assistant does not stage, commit, or push until you confirm. Answering "yes"
 2. Name the folder inside `mods/` with that internal name, or `internal-name_version`.
 3. Replace the hello message with your prototypes and scripts.
 4. Create an API key at [factorio.com/profile](https://factorio.com/profile) under **API Keys**. Store it in the GitHub repository as an Actions secret named `FACTORIO_API_KEY`.
-5. Push to `main`. The workflow runs the tests and, when they pass, uploads the zip to this portal.
+5. Push to `main`. The workflow runs the tests and, when they pass, uploads the zip to this portal. A version that is already published is left as it is, and the workflow succeeds.
 
 A pattern in `.modfiles` that matches nothing stops the package step, so the zip only contains files you listed.

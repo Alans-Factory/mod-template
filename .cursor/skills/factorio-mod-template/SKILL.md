@@ -22,10 +22,11 @@ The example mod prints a message when the player joins a game. The rest of the r
 | `changelog.txt` | History shown in the mod browser. The top version is the newest and must match `info.json`. |
 | `locale/<language>/*.cfg` | Translations. The language folder is the language code (`en`). |
 | `thumbnail.png` | 144×144 image for the mod browser and the portal. |
+| `mod-description.md` | Long description of the mod. Stays in the repository and is not packed into the zip. |
 | `.modfiles` | Globs, from the repository root, of files that go into the zip. `#` comments out the line. A pattern with no match fails packaging. |
 | `tests/` | Unit tests that run outside the game. `bash .github/scripts/run-tests.sh` (Lua 5.4). |
 | `.github/workflows/test.yml` | Runs the tests on pull requests and on pushes outside `main`. |
-| `.github/workflows/publish.yml` | On `main`, runs the tests and then publishes. |
+| `.github/workflows/publish.yml` | On `main`, runs the tests and then publishes. Skips the upload and succeeds when that version is already on the portal. |
 | `.github/scripts/` | Reads `info.json`, builds the zip, uploads it, and runs the tests. |
 
 The game also loads these files when they exist: `settings.lua`, `settings-updates.lua`, `settings-final-fixes.lua`, `data-updates.lua`, and `data-final-fixes.lua`. When creating one of them, add its name to `.modfiles`. Any other `.lua` file runs only if one of these files `require`s it.
@@ -72,12 +73,13 @@ Compare everything that changed since the last version published on the mod port
 
 ### 3. Edit the release files
 
-With that result, edit the relevant files (for example `info.json`, the changelog, and so on), but do not stage or commit them. Only edit.
+With that result, edit every pertinent file, but do not stage or commit. Only edit.
+
+A file is pertinent when the diff makes its contents stale. That includes what the player sees and what the mod listing shows. `info.json` and `changelog.txt` are part of that set. So are the locale files, the short description in `info.json`, `thumbnail.png`, `mod-description.md`, and any other file in the repository that still describes the previous behavior. Update all of them in the same edit. Leave a file untouched only when its contents are already true after the change.
 
 - If the diff has no change a player would notice, do not change the version or the changelog. Say there is no new release and stop.
 - If there is, bump `info.json` `version`: patch for a fix, minor for a feature, major for an incompatible change.
 - Insert that version at the top of `changelog.txt`, with today's date in the `DD. MM. YYYY` format and only the categories that fit the changes.
-- Adjust locale, description, or thumbnail when the diff requires it.
 - Do not run `git add` or `git commit`.
 
 ### 4. Message and confirmation
@@ -92,4 +94,4 @@ Release <version>: <what changed for the player>.
 <why this version exists>
 ```
 
-Finishing the job, only after a "yes" reply, means: stage the files changed in this preparation, commit with that message, and push `main`. That push starts the publish workflow. Any other reply does not commit and does not push.
+Finishing the job, only after a "yes" reply, means: stage the files changed in this preparation, commit with that message, and push `main`. That push starts the publish workflow. The workflow uploads the zip only when the `info.json` version is not already on the portal. The same version finishes successfully without uploading. Any other reply does not commit and does not push.
