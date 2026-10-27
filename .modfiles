@@ -1,0 +1,9 @@
+# Globs of files packed into the mod, relative to the repository root.
+# A line starting with # is a comment. Blank lines are ignored.
+
+info.json
+changelog.txt
+thumbnail.png
+control.lua
+data.lua
+locale/**

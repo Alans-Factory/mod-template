@@ -1,0 +1,9 @@
+{
+  "name": "mod-template",
+  "version": "0.1.0",
+  "title": "Mod template",
+  "author": "Your Name",
+  "factorio_version": "2.1",
+  "dependencies": ["base >= 2.1"],
+  "description": "Starter Factorio mod. Prints a hello message when a player joins a game."
+}

@@ -1,0 +1,28 @@
+name: Publish Factorio Mod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  publish-mod:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Read mod info
+        run: bash .github/scripts/read-mod-info.sh
+
+      - name: Create zip
+        run: bash .github/scripts/create-mod-zip.sh
+
+      - name: Upload Mod
+        env:
+          FACTORIO_API_KEY: ${{ secrets.FACTORIO_API_KEY }}
+        run: bash .github/scripts/upload-mod.sh

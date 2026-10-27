@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 27. 10. 2026
+  Major Features:
+    - Initial release. Print a hello message when a player joins a game.
