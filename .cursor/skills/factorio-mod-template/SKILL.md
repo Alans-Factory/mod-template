@@ -1,95 +1,95 @@
 ---
 name: factorio-mod-template
 description: >-
-  Orienta o onboarding de um mod criado a partir do mod-template do Factorio:
-  estrutura dos arquivos, obtenção e cadastro da chave de API do portal, e
-  preparação de uma publicação. Use quando o usuário clonar ou renomear este
-  template, perguntar da estrutura do mod, da chave do portal, ou pedir para
-  publicar ou preparar uma versão antes da publicação.
+  Guides onboarding for a mod created from the Factorio mod-template: file
+  layout, how to obtain and register the mod portal API key, and how to
+  prepare a release. Use when the user clones or renames this template, asks
+  about the mod layout or the portal key, or asks to publish or prepare a
+  version before publishing.
 ---
 
 # Mod template
 
-O mod de exemplo imprime uma mensagem quando o jogador entra na partida. O restante do repositório é a base de teste, empacotamento e envio ao portal.
+The example mod prints a message when the player joins a game. The rest of the repository is the base for tests, packaging, and upload to the portal.
 
-## Estrutura do mod
+## Mod layout
 
-| Arquivo | Função |
+| File | Role |
 |---|---|
-| `info.json` | Nome interno, versão, título, autor, `factorio_version` e descrição. Obrigatório. |
-| `control.lua` | Script de runtime. No template, imprime `mod-template.hello` em `on_player_joined_game`. |
-| `data.lua` | Protótipos, via `data:extend`. Vazio até haver protótipos. |
-| `changelog.txt` | Histórico exibido no navegador de mods. A versão do topo é a mais nova e tem de ser a mesma de `info.json`. |
-| `locale/<idioma>/*.cfg` | Traduções. A pasta do idioma é o código (`en`). |
-| `thumbnail.png` | Imagem 144×144 do navegador de mods e do portal. |
-| `.modfiles` | Globs, a partir da raiz, dos arquivos que entram no zip. `#` comenta a linha. Padrão sem match falha o empacotamento. |
-| `tests/` | Testes unitários fora do jogo. `bash .github/scripts/run-tests.sh` (Lua 5.4). |
-| `.github/workflows/test.yml` | Roda os testes em pull request e em push fora da `main`. |
-| `.github/workflows/publish.yml` | Na `main`, roda os testes e depois publica. |
-| `.github/scripts/` | Leitura do `info.json`, zip, upload e execução dos testes. |
+| `info.json` | Internal name, version, title, author, `factorio_version`, and description. Required. |
+| `control.lua` | Runtime script. In the template, prints `mod-template.hello` on `on_player_joined_game`. |
+| `data.lua` | Prototypes, via `data:extend`. Empty until there are prototypes. |
+| `changelog.txt` | History shown in the mod browser. The top version is the newest and must match `info.json`. |
+| `locale/<language>/*.cfg` | Translations. The language folder is the language code (`en`). |
+| `thumbnail.png` | 144×144 image for the mod browser and the portal. |
+| `.modfiles` | Globs, from the repository root, of files that go into the zip. `#` comments out the line. A pattern with no match fails packaging. |
+| `tests/` | Unit tests that run outside the game. `bash .github/scripts/run-tests.sh` (Lua 5.4). |
+| `.github/workflows/test.yml` | Runs the tests on pull requests and on pushes outside `main`. |
+| `.github/workflows/publish.yml` | On `main`, runs the tests and then publishes. |
+| `.github/scripts/` | Reads `info.json`, builds the zip, uploads it, and runs the tests. |
 
-O jogo também carrega, se existirem, `settings.lua`, `settings-updates.lua`, `settings-final-fixes.lua`, `data-updates.lua` e `data-final-fixes.lua`. Ao criar um desses, inclua o nome em `.modfiles`. Qualquer outro `.lua` só entra em execução se um desses arquivos der `require` nele.
+The game also loads these files when they exist: `settings.lua`, `settings-updates.lua`, `settings-final-fixes.lua`, `data-updates.lua`, and `data-final-fixes.lua`. When creating one of them, add its name to `.modfiles`. Any other `.lua` file runs only if one of these files `require`s it.
 
-Ao renomear o mod, troque o nome interno em `info.json`, no arquivo e na seção de `locale/`, e na chave usada em `control.lua`. A pasta dentro de `mods/` deve ser o nome interno, ou `nome_versão`.
+When renaming the mod, change the internal name in `info.json`, in the locale file and its section, and in the key used in `control.lua`. The folder inside `mods/` must be the internal name, or `name_version`.
 
-`changelog.txt` começa com uma linha de exatamente 99 traços. Cada versão tem `Version: ` e, opcionalmente, `Date: `. A categoria começa com dois espaços e termina com dois-pontos. Cada item começa com quatro espaços, um hífen e um espaço. Sem tabulação e sem espaço no fim da linha. Categorias reconhecidas pelo jogo: Major Features, Features, Minor Features, Graphics, Sounds, Optimizations, Balancing, Combat Balancing, Circuit Network, Changes, Bugfixes, Modding, Scripting, Gui, Control, Translation, Debug, Ease of use, Info, Locale, Compatibility.
+`changelog.txt` starts with a line of exactly 99 dashes. Each version has `Version: ` and, optionally, `Date: `. A category starts with two spaces and ends with a colon. Each entry starts with four spaces, a hyphen, and a space. No tabs and no trailing space. Categories recognized by the game: Major Features, Features, Minor Features, Graphics, Sounds, Optimizations, Balancing, Combat Balancing, Circuit Network, Changes, Bugfixes, Modding, Scripting, Gui, Control, Translation, Debug, Ease of use, Info, Locale, Compatibility.
 
-## Chave de API do portal de mods do Factorio
+## Factorio mod portal API key
 
-### Obtenção da chave
+### Obtaining the key
 
-1. Abra <https://factorio.com/profile> com a conta que publica o mod.
-2. Crie uma chave em **API Keys**.
-3. Não use o token antigo exibido no perfil. A publicação usa só a API key.
+1. Open <https://factorio.com/profile> with the account that publishes the mod.
+2. Create a key under **API Keys**.
+3. Do not use the legacy token shown on the profile. Publishing uses only the API key.
 
-### Cadastro da chave no Github
+### Registering the key on GitHub
 
-1. No repositório do mod: **Settings → Secrets and variables → Actions**.
-2. Crie um secret de repositório.
-3. O nome é exatamente `FACTORIO_API_KEY`.
-4. O valor é a chave. Ela não entra no git.
+1. In the mod repository: **Settings → Secrets and variables → Actions**.
+2. Create a repository secret.
+3. The name is exactly `FACTORIO_API_KEY`.
+4. The value is the key. It does not go into git.
 
-O workflow de publicação lê esse secret e o envia em `Authorization: Bearer` para `https://mods.factorio.com/api/v2/mods/releases/init_upload`.
+The publish workflow reads that secret and sends it as `Authorization: Bearer` to `https://mods.factorio.com/api/v2/mods/releases/init_upload`.
 
-## Publicação do mod
+## Publishing the mod
 
-Caso o usuário solicite publicação ou mesmo uma preparação antes da publicação, executar os passos abaixo. Não commitar, não dar stage e não publicar antes do fim deste fluxo.
+When the user asks to publish, or to prepare a release before publishing, follow the steps below. Do not commit, stage, or publish before this flow finishes.
 
-### 1. Árvore limpa
+### 1. Clean tree
 
-Primeiramente, o usuário deve commitar e/ou descartar todas as alterações. Continuar somente quando não houver alterações (nem mesmo em staging).
+The user must commit and/or discard every change first. Continue only when there are no changes, including staged ones.
 
-Conferir com `git status --porcelain`. Qualquer saída, inclusive arquivo novo ou linha em stage, encerra o fluxo. Dizer o que ainda está pendente e parar. Não descartar, não guardar em stash e não commitar no lugar do usuário.
+Check with `git status --porcelain`. Any output, including a new file or a staged line, ends the flow. Say what is still pending and stop. Do not discard, stash, or commit on the user's behalf.
 
-### 2. O que mudou desde a última versão do portal
+### 2. What changed since the last portal version
 
-Confrontar tudo que mudou desde a última versão publicada no portal de mods.
+Compare everything that changed since the last version published on the mod portal.
 
-- Ler `name` e `version` em `info.json`.
-- Consultar `https://mods.factorio.com/api/mods/<name>`.
-- Se o mod existir, a versão publicada é a maior `releases[].version`, sem depender da ordem do array. Achar o commit em que `info.json` passou a ter essa versão e comparar desse commit até `HEAD`.
-- Se o portal responder que o mod não existe, não há versão publicada. Comparar a partir do primeiro commit.
+- Read `name` and `version` from `info.json`.
+- Query `https://mods.factorio.com/api/mods/<name>`.
+- If the mod exists, the published version is the highest `releases[].version`, regardless of array order. Find the commit where `info.json` first had that version and compare from that commit to `HEAD`.
+- If the portal responds that the mod does not exist, there is no published version. Compare from the first commit.
 
-### 3. Alterar os arquivos da release
+### 3. Edit the release files
 
-Com o resultado, alterar os arquivos pertinentes (ex.: info.json, changelog etc), mas não colocar em stage e nem commitar, apenas alterar.
+With that result, edit the relevant files (for example `info.json`, the changelog, and so on), but do not stage or commit them. Only edit.
 
-- Se o diff não tiver mudança que o jogador perceba, não alterar versão nem changelog. Dizer que não há release nova e parar.
-- Se houver, subir `info.json` `version`: patch para correção, minor para funcionalidade, major para mudança incompatível.
-- Inserir essa versão no topo de `changelog.txt`, com a data de hoje no formato `DD. MM. YYYY` e só as categorias que couberem nas mudanças.
-- Ajustar locale, descrição ou thumbnail quando o diff exigir.
-- Não executar `git add` nem `git commit`.
+- If the diff has no change a player would notice, do not change the version or the changelog. Say there is no new release and stop.
+- If there is, bump `info.json` `version`: patch for a fix, minor for a feature, major for an incompatible change.
+- Insert that version at the top of `changelog.txt`, with today's date in the `DD. MM. YYYY` format and only the categories that fit the changes.
+- Adjust locale, description, or thumbnail when the diff requires it.
+- Do not run `git add` or `git commit`.
 
-### 4. Mensagem e confirmação
+### 4. Message and confirmation
 
-No fim, mostrar uma mensagem de commit com o novo número de versão e o que foi feito. Orientar o usuário que ele pode seguir por conta própria, porém perguntar se ele quer que o agente termine o serviço, bastando responder "sim".
+At the end, show a commit message with the new version number and what was done. Tell the user they can continue on their own, and ask whether they want the agent to finish the job. Answering "sim" is enough.
 
-A mensagem fica neste formato:
+The message uses this format:
 
 ```
-Release <versão>: <o que mudou para o jogador>.
+Release <version>: <what changed for the player>.
 
-<por que essa versão existe>
+<why this version exists>
 ```
 
-Terminar o serviço, somente depois de uma resposta "sim", é: colocar em stage os arquivos alterados nesta preparação, commitar com essa mensagem e fazer push da `main`. Esse push dispara o workflow de publicação. Qualquer outra resposta não commita e não faz push.
+Finishing the job, only after a "sim" reply, means: stage the files changed in this preparation, commit with that message, and push `main`. That push starts the publish workflow. Any other reply does not commit and does not push.

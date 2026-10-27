@@ -1,0 +1,32 @@
+---
+description: Write project documentation and code comments in English
+alwaysApply: true
+---
+
+# Documentation in English
+
+Write all project documentation and code comments in English.
+
+This covers:
+
+- Code comments and docstrings
+- README, changelog, and other docs in the repository
+- Names and descriptions inside documentation files
+
+Chat replies to the user stay in the language they are using. Only repository documentation and comments are in English.
+
+```lua
+-- ❌ BAD
+-- Aumenta a velocidade da esteira quando a pesquisa termina.
+
+-- ✅ GOOD
+-- Increases belt speed when the research finishes.
+```
+
+```markdown
+<!-- ❌ BAD -->
+## Como publicar
+
+<!-- ✅ GOOD -->
+## How to publish
+```
