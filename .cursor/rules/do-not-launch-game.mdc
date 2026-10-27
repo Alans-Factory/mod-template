@@ -1,0 +1,21 @@
+---
+description: Do not launch Factorio unless the user asks
+alwaysApply: true
+---
+
+# Do not launch the game
+
+Do not start Factorio unless the user explicitly asks to open, launch, or run the game.
+
+This includes the client, a headless or server instance, and any command whose purpose is to start the game binary to check a mod.
+
+Unit tests, packaging, and portal scripts are fine. They do not start the game.
+
+```bash
+# ❌ BAD
+factorio --load-game test
+~/.factorio/bin/x64/factorio
+
+# ✅ GOOD
+bash .github/scripts/run-tests.sh
+```
