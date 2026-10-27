@@ -82,7 +82,7 @@ With that result, edit the relevant files (for example `info.json`, the changelo
 
 ### 4. Message and confirmation
 
-At the end, show a commit message with the new version number and what was done. Tell the user they can continue on their own, and ask whether they want the agent to finish the job. Answering "sim" is enough.
+At the end, show a commit message with the new version number and what was done. Tell the user they can continue on their own, and ask whether they want the agent to finish the job. Answering "yes" is enough.
 
 The message uses this format:
 
@@ -92,4 +92,4 @@ Release <version>: <what changed for the player>.
 <why this version exists>
 ```
 
-Finishing the job, only after a "sim" reply, means: stage the files changed in this preparation, commit with that message, and push `main`. That push starts the publish workflow. Any other reply does not commit and does not push.
+Finishing the job, only after a "yes" reply, means: stage the files changed in this preparation, commit with that message, and push `main`. That push starts the publish workflow. Any other reply does not commit and does not push.
