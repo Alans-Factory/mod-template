@@ -26,7 +26,7 @@ The example mod prints a message when the player joins a game. The rest of the r
 | `.modfiles` | Globs, from the repository root, of files that go into the zip. `#` comments out the line. A pattern with no match fails packaging. |
 | `tests/` | Unit tests that run outside the game. `bash .github/scripts/run-tests.sh` (Lua 5.4). |
 | `.github/workflows/test.yml` | Runs the tests on pull requests and on pushes outside `main`. |
-| `.github/workflows/publish.yml` | On `main`, runs the tests and then publishes. Skips the upload and succeeds when that version is already on the portal. |
+| `.github/workflows/publish.yml` | On `main`, checks the portal first. When that version is already published, the workflow succeeds without tests or packaging. Otherwise it runs the tests and publishes. |
 | `.github/scripts/` | Reads `info.json`, builds the zip, uploads it, and runs the tests. |
 
 The game also loads these files when they exist: `settings.lua`, `settings-updates.lua`, `settings-final-fixes.lua`, `data-updates.lua`, and `data-final-fixes.lua`. When creating one of them, add its name to `.modfiles`. Any other `.lua` file runs only if one of these files `require`s it.
@@ -94,4 +94,4 @@ Release <version>: <what changed for the player>.
 <why this version exists>
 ```
 
-Finishing the job, only after a "yes" reply, means: stage the files changed in this preparation, commit with that message, and push `main`. That push starts the publish workflow. The workflow uploads the zip only when the `info.json` version is not already on the portal. The same version finishes successfully without uploading. Any other reply does not commit and does not push.
+Finishing the job, only after a "yes" reply, means: stage the files changed in this preparation, commit with that message, and push `main`. That push starts the publish workflow. The workflow checks the portal before tests and packaging. It uploads the zip only when the `info.json` version is not already on the portal. The same version finishes successfully without running the tests or building the zip. Any other reply does not commit and does not push.

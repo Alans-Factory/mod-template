@@ -6,11 +6,26 @@ on:
       - main
 
 jobs:
+  release-check:
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.check.outputs.publish }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check published version
+        id: check
+        run: bash .github/scripts/check-published-version.sh
+
   test:
+    needs: release-check
+    if: needs.release-check.outputs.publish == 'true'
     uses: ./.github/workflows/test.yml
 
   publish-mod:
-    needs: test
+    needs: [release-check, test]
+    if: needs.release-check.outputs.publish == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

@@ -40,7 +40,7 @@ bash .github/scripts/run-tests.sh
 
 ## Publish
 
-Pushing to `main` runs the tests and, if they pass, uploads the zip to the Factorio mod portal. When `info.json` already has a version that is on the portal, the upload is skipped and the workflow succeeds.
+Pushing to `main` checks the mod portal first. If that version is already published, the workflow succeeds without tests or packaging. Otherwise it runs the tests and, if they pass, uploads the zip.
 
 Create an API key at <https://factorio.com/profile> under **API Keys**. Do not use the legacy profile token. In the GitHub repository, add it as an Actions secret named `FACTORIO_API_KEY` (Settings → Secrets and variables → Actions).
 
